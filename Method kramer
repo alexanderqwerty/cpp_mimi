@@ -1,0 +1,38 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#define pb push_back
+using namespace std;
+typedef vector<vector<double>> vvd;
+typedef vector<double> vd;
+double del(vvd& a){
+    return a[0][0]*a[1][1]*a[2][2]+a[0][1]*a[1][2]*a[2][0]+a[2][1]*a[1][0]*a[0][2]
+    -a[0][2]*a[1][1]*a[2][0]-a[0][0]*a[1][2]*a[2][1]-a[1][0]*a[0][1]*a[2][2];
+}
+vector<double> metod_Kramler(vvd& x,vector<double>&anses){
+    double d = del(x);
+    vector <double> ds(3);
+    if(d!=0) {
+        for (int i = 0; i < 3; ++i) {
+            vvd _x = x;
+            for (int j = 0; j < 3; ++j) {
+                _x[j][i] = anses[j];
+            }
+            ds[i] = del(_x);
+        }
+        cout<< "x1 = "<<ds[0]/d <<"\nx2 = "<<ds[1]/d<< "\nx3 = "<<ds[2]/d;
+    }
+    else{
+        cout<< "No answer";
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    vvd x = {{2,3,-1},
+             {1,-2,1},
+             {1,0,2}};
+    vd anses = {9,3,2};
+    metod_Kramler(x,anses);
+    return 0;
+}
