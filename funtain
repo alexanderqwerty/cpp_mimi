@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+struct point {
+    double x, y, z;
+    int n;
+    vector<double> dises_p_to_p;
+    vector<double> dises_p_to_f_to_p;
+};
+
+double dis_p_to_p(point &p1, point &p2) {
+    return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y) + (p2.z - p1.z) * (p2.z - p1.z));
+}
+
+point p0 = {0, 0, 0};
+
+double dis_p_to_f_to_p(point &p1, point &p2, int r) {
+    double dis_min = dis_p_to_p(p1, p0) + dis_p_to_p(p0, p2);
+    for (int i = -r; i <= r; ++i)
+        for (int j = -r; j <= r; ++j) {
+            point p = {(double) i, (double) j, 0};
+            double dis = dis_p_to_p(p1, p) + dis_p_to_p(p, p2);
+            if(dis_min>dis){
+                dis_min = dis;
+            }
+        }
+    return dis_min;
+}
+
+int main() {
+    int n, r, m;
+    cin >> n >> r >> m;
+    vector<point> c(n);
+    for (int i = 0; i < n; ++i) {
+        c[i].n=i;
+        cin >> c[i].x;
+        cin >> c[i].y;
+        cin >> c[i].z;
+        c[i].dises_p_to_p.resize(n);
+        c[i].dises_p_to_f_to_p.resize(n);
+    }
+    for(int i=0;i<n;++i){
+        for(int j = 0;j<n;++j){
+            if(c[i].n==c[j].n)
+                continue;
+             c[i].dises_p_to_p[j] = dis_p_to_p(c[i],c[j]);
+             c[i].dises_p_to_f_to_p[j] = dis_p_to_f_to_p(c[i],c[j],r);
+        }
+    }
+    return 0;
+}
